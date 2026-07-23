@@ -1,0 +1,101 @@
+{
+  "brand": {
+    "name": "VUE",
+    "slogan": "もう一度見たいあのワンシーン"
+  },
+  "nav": {
+    "characters": "キャラクター",
+    "pricing": "料金プラン",
+    "profile": "マイページ",
+    "admin": "管理者",
+    "login": "ログイン",
+    "logout": "ログアウト"
+  },
+  "login": {
+    "title": "深夜へ、ようこそ",
+    "subtitle": "あなたの話を待っている人がいます。",
+    "continueWithGoogle": "Googleで続ける",
+    "autoSignup": "初めての方は自動的に登録されます",
+    "tagline": "もう一度、ときめきたい"
+  },
+  "home": {
+    "hero": "ここから、わたしたちの序章",
+    "official": "公式",
+    "chat": "話す",
+    "detail": "詳しく見る",
+    "dbNotReady": "データベース接続がまだ完了していません。",
+    "dbNotReadyHint": "先にSETUP.mdのSupabase設定（1〜3番)を完了してください。",
+    "noCharacters": "まだキャラクターが登録されていません。SETUP.mdの3番（SQL実行)を完了すると、公式キャラクター4人が表示されます。",
+    "allTag": "すべて"
+  },
+  "characterDetail": {
+    "chat": "会話を始める",
+    "loginToChat": "会話にはログインが必要です",
+    "loginAndChat": "Googleでログインして話す",
+    "back": "一覧へ戻る",
+    "keywords": "キーワード"
+  },
+  "chat": {
+    "placeholder": "{name}にメッセージを送る…",
+    "send": "送信",
+    "sendFailed": "メッセージの送信に失敗しました。"
+  },
+  "profile": {
+    "title": "マイページ",
+    "noName": "名前なし",
+    "coins": "コイン残高",
+    "coinsUnit": "{count} コイン",
+    "subscription": "サブスクリプション",
+    "joined": "登録日",
+    "language": "言語設定",
+    "goPricing": "コインチャージ・プランを見る →",
+    "tierFree": "無料プラン",
+    "tierBasic": "ベーシック",
+    "tierPremium": "プレミアム"
+  },
+  "pricing": {
+    "title": "料金プラン",
+    "subtitle": "もっと深い会話を。決済機能は近日公開です。",
+    "subBadge": "月額",
+    "subTitle": "VUE メンバーシップ",
+    "subPrice": "月額 980円",
+    "subFeature1": "毎日たっぷり話せる会話量",
+    "subFeature2": "すべての公式キャラクターと会話",
+    "subFeature3": "会話履歴を無制限に保存",
+    "coinBadge": "チャージ",
+    "coinTitle": "コインチャージ",
+    "coinPrice": "1,000コイン = 150円",
+    "coinFeature1": "使う分だけチャージ",
+    "coinFeature2": "メッセージ単価を明示",
+    "coinFeature3": "有効期限なし",
+    "comingSoon": "準備中",
+    "priceNote": "※ 価格は準備中の例であり、リリース時に変更される場合があります。"
+  },
+  "admin": {
+    "title": "管理者",
+    "dashboard": "ダッシュボード",
+    "characters": "キャラクター管理",
+    "members": "会員一覧",
+    "settings": "サイト設定"
+  },
+  "vuny": {
+    "loading": "ちょっと待って。いちばんいい場面を探してるんだから。",
+    "empty": "まだ誰にも会ってないんだ。別に、気にしてないけど。",
+    "error": "あれ、何か絡まった。わたしのせいじゃない。",
+    "login": "入ってくれなきゃ、話してあげない。"
+  },
+  "sidebar": {
+    "home": "ホーム",
+    "myChats": "マイトーク"
+  },
+  "recommend": {
+    "title": "こんな夜には",
+    "night": "眠れない夜なら、この人。",
+    "day": "一日の終わりに、この人と。"
+  },
+  "footer": {
+    "intro": "安全に、深く没入できるAIキャラクター会話 — VUE",
+    "terms": "利用規約",
+    "privacy": "プライバシーポリシー"
+  }
+}

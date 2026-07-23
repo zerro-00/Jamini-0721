@@ -1,0 +1,101 @@
+{
+  "brand": {
+    "name": "VUE",
+    "slogan": "想再看一次的那个瞬间"
+  },
+  "nav": {
+    "characters": "角色",
+    "pricing": "价格方案",
+    "profile": "我的主页",
+    "admin": "管理员",
+    "login": "登录",
+    "logout": "退出登录"
+  },
+  "login": {
+    "title": "深夜，欢迎回来",
+    "subtitle": "有人在等着听你的故事。",
+    "continueWithGoogle": "使用 Google 继续",
+    "autoSignup": "首次登录将自动注册",
+    "tagline": "想要再体验一次的心动"
+  },
+  "home": {
+    "hero": "现在起，我们的初篇",
+    "official": "官方",
+    "chat": "开始对话",
+    "detail": "查看详情",
+    "dbNotReady": "数据库连接尚未完成。",
+    "dbNotReadyHint": "请先完成 SETUP.md 中的 Supabase 设置（第1~3步）。",
+    "noCharacters": "还没有角色。完成 SETUP.md 第3步（运行 SQL）后，4位官方角色就会出现。",
+    "allTag": "全部"
+  },
+  "characterDetail": {
+    "chat": "开始对话",
+    "loginToChat": "对话需要先登录",
+    "loginAndChat": "使用 Google 登录并对话",
+    "back": "返回列表",
+    "keywords": "关键词"
+  },
+  "chat": {
+    "placeholder": "给{name}发消息…",
+    "send": "发送",
+    "sendFailed": "消息发送失败。"
+  },
+  "profile": {
+    "title": "我的主页",
+    "noName": "未设置昵称",
+    "coins": "金币余额",
+    "coinsUnit": "{count} 金币",
+    "subscription": "订阅状态",
+    "joined": "注册日期",
+    "language": "偏好语言",
+    "goPricing": "充值金币 · 查看方案 →",
+    "tierFree": "免费方案",
+    "tierBasic": "基础版",
+    "tierPremium": "高级版"
+  },
+  "pricing": {
+    "title": "价格方案",
+    "subtitle": "想要更深入的对话？支付功能即将上线。",
+    "subBadge": "包月",
+    "subTitle": "VUE 会员",
+    "subPrice": "每月 45 元",
+    "subFeature1": "每天充足的对话额度",
+    "subFeature2": "与所有官方角色对话",
+    "subFeature3": "无限保存对话记录",
+    "coinBadge": "充值",
+    "coinTitle": "金币充值",
+    "coinPrice": "1,000 金币 = 7 元",
+    "coinFeature1": "用多少充多少",
+    "coinFeature2": "每条消息价格透明",
+    "coinFeature3": "金币永不过期",
+    "comingSoon": "敬请期待",
+    "priceNote": "* 价格为筹备中的示例，上线时可能调整。"
+  },
+  "admin": {
+    "title": "管理员",
+    "dashboard": "数据看板",
+    "characters": "角色管理",
+    "members": "会员列表",
+    "settings": "网站设置"
+  },
+  "vuny": {
+    "loading": "等一下。我在找最好的那一幕呢。",
+    "empty": "还没遇见任何人呢。我才没有在意。",
+    "error": "咦，好像出错了。不是我的错。",
+    "login": "先进来，我才告诉你。"
+  },
+  "sidebar": {
+    "home": "首页",
+    "myChats": "我的对话"
+  },
+  "recommend": {
+    "title": "这样的夜晚",
+    "night": "睡不着的夜里，就找他吧。",
+    "day": "一天结束时，和他聊聊。"
+  },
+  "footer": {
+    "intro": "安全而沉浸的AI角色对话 — VUE",
+    "terms": "服务条款",
+    "privacy": "隐私政策"
+  }
+}

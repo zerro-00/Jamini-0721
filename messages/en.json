@@ -1,0 +1,101 @@
+{
+  "brand": {
+    "name": "VUE",
+    "slogan": "The scene you want to see again"
+  },
+  "nav": {
+    "characters": "Characters",
+    "pricing": "Pricing",
+    "profile": "My Profile",
+    "admin": "Admin",
+    "login": "Sign in",
+    "logout": "Sign out"
+  },
+  "login": {
+    "title": "Welcome to the late night",
+    "subtitle": "Someone is waiting to hear your story.",
+    "continueWithGoogle": "Continue with Google",
+    "autoSignup": "First time? An account is created automatically.",
+    "tagline": "Feel it again"
+  },
+  "home": {
+    "hero": "From here, our first page",
+    "official": "Official",
+    "chat": "Chat",
+    "detail": "View details",
+    "dbNotReady": "The database connection isn't ready yet.",
+    "dbNotReadyHint": "Please complete the Supabase setup (steps 1–3) in SETUP.md first.",
+    "noCharacters": "No characters yet. Complete step 3 (run the SQL) in SETUP.md and the 4 official characters will appear.",
+    "allTag": "All"
+  },
+  "characterDetail": {
+    "chat": "Start chatting",
+    "loginToChat": "Sign in to start chatting",
+    "loginAndChat": "Sign in with Google and chat",
+    "back": "Back to list",
+    "keywords": "Keywords"
+  },
+  "chat": {
+    "placeholder": "Message {name}…",
+    "send": "Send",
+    "sendFailed": "Failed to send the message."
+  },
+  "profile": {
+    "title": "My Profile",
+    "noName": "No name",
+    "coins": "Coin balance",
+    "coinsUnit": "{count} coins",
+    "subscription": "Subscription",
+    "joined": "Joined",
+    "language": "Preferred language",
+    "goPricing": "Top up coins · View plans →",
+    "tierFree": "Free plan",
+    "tierBasic": "Basic",
+    "tierPremium": "Premium"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "subtitle": "For deeper conversations. Payments are coming soon.",
+    "subBadge": "Monthly",
+    "subTitle": "VUE Membership",
+    "subPrice": "$7.99 / month",
+    "subFeature1": "Generous daily chat allowance",
+    "subFeature2": "Chat with all official characters",
+    "subFeature3": "Unlimited chat history",
+    "coinBadge": "Top-up",
+    "coinTitle": "Coin Top-up",
+    "coinPrice": "1,000 coins = $0.99",
+    "coinFeature1": "Pay only for what you use",
+    "coinFeature2": "Transparent per-message pricing",
+    "coinFeature3": "Coins never expire",
+    "comingSoon": "Coming soon",
+    "priceNote": "* Prices are placeholders and may change at launch."
+  },
+  "admin": {
+    "title": "Admin",
+    "dashboard": "Dashboard",
+    "characters": "Characters",
+    "members": "Members",
+    "settings": "Site Settings"
+  },
+  "vuny": {
+    "loading": "Hold on. I'm finding the best scene.",
+    "empty": "No one yet. Not that I care.",
+    "error": "Huh, something got tangled. Not my fault.",
+    "login": "Come in first. Then we'll talk."
+  },
+  "sidebar": {
+    "home": "Home",
+    "myChats": "My Chats"
+  },
+  "recommend": {
+    "title": "For a night like this",
+    "night": "If sleep won't come, he's the one to talk to.",
+    "day": "End your day with him."
+  },
+  "footer": {
+    "intro": "Immersive AI character conversations, kept safe — VUE",
+    "terms": "Terms",
+    "privacy": "Privacy"
+  }
+}

@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/* ============================================================
+   VUE 디자인 토큰 — "늦은 밤의 고요하고 사적인 공간"
+   전체 화면에서 이 색상들만 사용한다. (원색·네온·과채도 금지)
+   ============================================================ */
+@theme {
+  /* 배경 */
+  --color-night: #12101a; /* 배경 기본 — 어두운 보라빛 차콜 */
+  --color-panel: #1c1826; /* 카드/패널 */
+  --color-line: #2a2437; /* 테두리·구분선 */
+
+  /* 텍스트 */
+  --color-ink: #f0edf5; /* 본문 */
+  --color-ink-soft: #a79fb8; /* 보조 */
+
+  /* 포인트 — 배경과 같은 보라 계열의 딥 플럼 톤 (채도 낮게, 네온 금지) */
+  --color-cta: #6b3a5b; /* CTA 메인 — 딥 플럼 */
+  --color-cta-hover: #8a4b75; /* CTA 호버 — 한 톤 밝게 */
+  --color-wine: #a85d7f; /* 보조 강조 — 태그·활성·아이콘 */
+  --color-rose: #d4a0b8; /* 링크·소소한 강조 — 연한 로즈 */
+
+  /* 폰트 */
+  --font-sans: "Pretendard Variable", Pretendard, var(--font-noto-jp),
+    var(--font-noto-sc), -apple-system, BlinkMacSystemFont, system-ui,
+    "Segoe UI", sans-serif;
+}
+
+body {
+  background: var(--color-night);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+}
+
+/* 언어별 타이포 미세조정 — 전환 시 줄높이·자간이 깨지지 않게 */
+html[lang="ko"] body {
+  letter-spacing: -0.01em;
+  line-height: 1.65;
+}
+html[lang="ja"] body {
+  letter-spacing: 0.01em;
+  line-height: 1.8;
+}
+html[lang="zh"] body {
+  letter-spacing: 0.01em;
+  line-height: 1.75;
+}
+html[lang="en"] body {
+  letter-spacing: 0;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+/* ============================================================
+   모션 — 절제된 등장 애니메이션 (200~400ms)
+   ============================================================ */
+
+/* 페이지 진입 페이드인 */
+@keyframes vue-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 카드·로그인 카드: 살짝 위로 떠오르며 등장 */
+@keyframes vue-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ◀◀ 로딩: 천천히 역방향 회전 (2초 1회전) */
+@keyframes vue-rewind-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.vue-fade-in {
+  animation: vue-fade-in 400ms ease-out both;
+}
+.vue-rise {
+  animation: vue-rise 400ms ease-out both;
+}
+.vue-rewind-spin {
+  animation: vue-rewind-spin 2s linear infinite;
+}
+
+/* 카드 순차 등장 (stagger 50ms) — CharacterGrid 에서 인덱스로 지정 */
+.vue-stagger {
+  animation: vue-rise 400ms ease-out both;
+  animation-delay: calc(var(--stagger, 0) * 50ms);
+}
+
+/* 모션 최소화 설정 존중 */
+@media (prefers-reduced-motion: reduce) {
+  .vue-fade-in,
+  .vue-rise,
+  .vue-stagger,
+  .vue-rewind-spin {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   배경 오브 — 평면감 제거용 아주 옅은 라벤더 빛 (opacity 5% 이하)
+   ============================================================ */
+.vue-orb {
+  position: fixed;
+  border-radius: 9999px;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 커스텀 스크롤바 (다크 테마) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-night);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-wine);
+}

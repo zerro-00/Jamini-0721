@@ -1,0 +1,101 @@
+{
+  "brand": {
+    "name": "VUE",
+    "slogan": "다시 보고 싶은 그 한 장면"
+  },
+  "nav": {
+    "characters": "캐릭터",
+    "pricing": "요금제",
+    "profile": "내 프로필",
+    "admin": "관리자",
+    "login": "로그인",
+    "logout": "로그아웃"
+  },
+  "login": {
+    "title": "늦은 밤, 어서 오세요",
+    "subtitle": "당신의 이야기를 기다리는 사람이 있어요.",
+    "continueWithGoogle": "구글로 계속하기",
+    "autoSignup": "처음이시면 자동으로 가입됩니다",
+    "tagline": "다시 느껴보고 싶은, 그 설렘"
+  },
+  "home": {
+    "hero": "지금부터, 우리의 첫 페이지",
+    "official": "공식",
+    "chat": "대화하기",
+    "detail": "자세히 보기",
+    "dbNotReady": "아직 데이터베이스 연결이 완료되지 않았어요.",
+    "dbNotReadyHint": "SETUP.md의 Supabase 설정(1~3번)을 먼저 완료해 주세요.",
+    "noCharacters": "아직 등록된 캐릭터가 없어요. SETUP.md 3번(SQL 실행)을 완료하면 공식 캐릭터 4명이 나타납니다.",
+    "allTag": "전체"
+  },
+  "characterDetail": {
+    "chat": "대화 시작하기",
+    "loginToChat": "대화하려면 로그인이 필요해요",
+    "loginAndChat": "구글로 로그인하고 대화하기",
+    "back": "목록으로",
+    "keywords": "키워드"
+  },
+  "chat": {
+    "placeholder": "{name}에게 메시지 보내기…",
+    "send": "전송",
+    "sendFailed": "메시지 전송에 실패했어요."
+  },
+  "profile": {
+    "title": "내 프로필",
+    "noName": "이름 없음",
+    "coins": "코인 잔액",
+    "coinsUnit": "{count} 코인",
+    "subscription": "구독 상태",
+    "joined": "가입일",
+    "language": "선호 언어",
+    "goPricing": "코인 충전 · 구독 알아보기 →",
+    "tierFree": "무료 플랜",
+    "tierBasic": "베이직 구독",
+    "tierPremium": "프리미엄 구독"
+  },
+  "pricing": {
+    "title": "요금제",
+    "subtitle": "더 깊은 대화를 원한다면. 결제 기능은 곧 열립니다.",
+    "subBadge": "월 구독",
+    "subTitle": "VUE 멤버십",
+    "subPrice": "월 9,900원",
+    "subFeature1": "매일 넉넉한 대화량",
+    "subFeature2": "모든 공식 캐릭터와 대화",
+    "subFeature3": "대화 기록 무제한 보관",
+    "coinBadge": "충전금",
+    "coinTitle": "코인 충전",
+    "coinPrice": "1,000코인 = 1,000원",
+    "coinFeature1": "쓰는 만큼만 충전",
+    "coinFeature2": "메시지당 가격 투명 표시",
+    "coinFeature3": "유효기간 없음",
+    "comingSoon": "준비 중",
+    "priceNote": "* 가격은 준비 중인 예시이며 출시 시 변경될 수 있어요."
+  },
+  "admin": {
+    "title": "관리자",
+    "dashboard": "대시보드",
+    "characters": "캐릭터 관리",
+    "members": "회원 목록",
+    "settings": "사이트 설정"
+  },
+  "vuny": {
+    "loading": "잠깐. 제일 좋은 장면 찾고 있잖아.",
+    "empty": "아직 아무도 안 만났네. 딱히 신경 쓰는 건 아니고.",
+    "error": "어, 뭔가 꼬였는데. 내 잘못 아니야.",
+    "login": "들어와야 얘기해 주지."
+  },
+  "sidebar": {
+    "home": "홈",
+    "myChats": "내 대화"
+  },
+  "recommend": {
+    "title": "이런 밤엔",
+    "night": "잠이 오지 않는 밤이라면, 이 사람이야.",
+    "day": "오늘 하루의 끝엔, 이 사람과."
+  },
+  "footer": {
+    "intro": "안전선 안에서, 웹툰처럼 몰입되는 AI 캐릭터 대화 — VUE",
+    "terms": "이용약관",
+    "privacy": "개인정보처리방침"
+  }
+}
