@@ -26,7 +26,8 @@
     "dbNotReady": "データベース接続がまだ完了していません。",
     "dbNotReadyHint": "先にSETUP.mdのSupabase設定（1〜3番)を完了してください。",
     "noCharacters": "まだキャラクターが登録されていません。SETUP.mdの3番（SQL実行)を完了すると、公式キャラクター4人が表示されます。",
-    "allTag": "すべて"
+    "allTag": "すべて",
+    "sectionTitle": "今日のキャラクター"
   },
   "characterDetail": {
     "chat": "会話を始める",
@@ -38,7 +39,12 @@
   "chat": {
     "placeholder": "{name}にメッセージを送る…",
     "send": "送信",
-    "sendFailed": "メッセージの送信に失敗しました。"
+    "sendFailed": "メッセージの送信に失敗しました。",
+    "models": {
+      "gemini": "速くて軽い会話",
+      "groq": "バランスの取れた自然な会話",
+      "openrouter": "多言語に強い会話"
+    }
   },
   "profile": {
     "title": "マイページ",

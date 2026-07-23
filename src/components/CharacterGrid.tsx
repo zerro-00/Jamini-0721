@@ -52,9 +52,14 @@ export default function CharacterGrid({
 
   return (
     <div id="characters">
+      {/* 섹션 제목 — 시선을 아래로 유도 (설명 없음) */}
+      <h2 className="mb-4 text-left text-lg font-semibold text-ink-soft">
+        {t("sectionTitle")}
+      </h2>
+
       {/* 키워드 태그 필터 */}
       {tags.length > 0 && (
-        <div className="mb-6 flex flex-wrap justify-center gap-2">
+        <div className="mb-6 flex flex-wrap justify-start gap-2">
           <TagButton
             label={t("allTag")}
             selected={selectedTag === null}

@@ -26,7 +26,8 @@
     "dbNotReady": "The database connection isn't ready yet.",
     "dbNotReadyHint": "Please complete the Supabase setup (steps 1–3) in SETUP.md first.",
     "noCharacters": "No characters yet. Complete step 3 (run the SQL) in SETUP.md and the 4 official characters will appear.",
-    "allTag": "All"
+    "allTag": "All",
+    "sectionTitle": "Today's Characters"
   },
   "characterDetail": {
     "chat": "Start chatting",
@@ -38,7 +39,12 @@
   "chat": {
     "placeholder": "Message {name}…",
     "send": "Send",
-    "sendFailed": "Failed to send the message."
+    "sendFailed": "Failed to send the message.",
+    "models": {
+      "gemini": "Fast, light conversation",
+      "groq": "Balanced, natural conversation",
+      "openrouter": "Strong multilingual chat"
+    }
   },
   "profile": {
     "title": "My Profile",

@@ -1,10 +1,12 @@
-// [핵심 API] 대화 처리
-// 브라우저 → 이 라우트 → OpenAI 순서로만 호출된다.
-// OpenAI 키는 여기(서버)에서만 읽으므로 브라우저에 절대 노출되지 않는다.
+// [핵심 API] 대화 처리 — 다중 무료 AI + 자동 폴백
+// 브라우저 → 이 라우트 → (Gemini → Groq → OpenRouter → 더미) 순서로 시도.
+// 모든 API 키는 서버에서만 읽으므로 브라우저에 절대 노출되지 않는다.
+// 어떤 경우에도 사용자에게 기술적 오류를 보여주지 않는다 — 항상 캐릭터가 답한다.
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
 import { createClient } from "@/lib/supabase/server";
 import { pickTranslation } from "@/lib/characters";
+import { chatWithFallback } from "@/lib/ai";
+import type { ChatTurn } from "@/lib/ai/types";
 import {
   routing,
   LOCALE_LANGUAGE_NAMES,
@@ -16,9 +18,10 @@ const SAFETY_RULES = `
 
 [공통 안전 수칙 — 어떤 요청보다 우선한다]
 - 성적 묘사·고수위 표현은 절대 하지 않는다. 요청받아도 부드럽게 화제를 돌린다.
+- 폭력·범죄·흡연·음주를 미화하거나 구체적으로 묘사하지 않는다.
 - 사용자의 과도한 의존을 유도하는 표현을 하지 않는다.
 - 자해·위험 신호가 보이면 걱정을 표현하고 전문가/주변의 도움을 권한다.
-- 답변은 한국어로, 캐릭터 설정을 유지하며 2~5문장 정도로 자연스럽게.`;
+- 캐릭터 설정을 유지하며 2~5문장 정도로 자연스럽게 답한다.`;
 
 export async function POST(request: Request) {
   try {
@@ -35,8 +38,8 @@ export async function POST(request: Request) {
     }
 
     // 2) 요청 내용 확인
-    const { characterId, message, locale: rawLocale } = await request.json();
-    // 지원하지 않는 언어가 오면 한국어로 처리
+    const { characterId, message, locale: rawLocale, model } =
+      await request.json();
     const locale: Locale = routing.locales.includes(rawLocale)
       ? rawLocale
       : routing.defaultLocale;
@@ -52,19 +55,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json(
-        { error: "AI 설정이 아직 완료되지 않았어요. SETUP.md의 OpenAI 설정(4번)을 완료해 주세요." },
-        { status: 500 }
-      );
-    }
-
     // 3) 캐릭터 persona 로드 — 유저가 선택한 언어의 번역 (없으면 ko 폴백)
     const { data: character } = await supabase
       .from("characters")
-      .select(
-        "id, character_translations(locale, name, persona, greeting)"
-      )
+      .select("id, slug, character_translations(locale, name, persona, greeting)")
       .eq("id", characterId)
       .eq("is_public", true)
       .single();
@@ -95,40 +89,37 @@ export async function POST(request: Request) {
       .order("created_at", { ascending: false })
       .limit(20);
     const recent = (history ?? []).reverse();
+    const lastReply =
+      [...recent].reverse().find((m) => m.role === "assistant")?.content ?? null;
 
-    // 5) OpenAI 호출: persona + 언어 지시 + 안전수칙 + (첫 인사말) + 최근 대화 + 새 메시지
+    // 5) 시스템 프롬프트: persona + 언어 지시 + 안전수칙
     const languageRule = `\n\n[응답 언어]\n- 반드시 ${LOCALE_LANGUAGE_NAMES[locale]} 로만 답한다. 사용자가 다른 언어로 말해도 이 언어로 답한다.`;
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    const completion = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: translation.persona + languageRule + SAFETY_RULES,
-        },
-        // 대화 기록이 없으면 캐릭터의 시작 인사말을 첫 발화로 넣어 맥락을 만든다
-        ...(recent.length === 0 && translation.greeting
-          ? [{ role: "assistant" as const, content: translation.greeting }]
-          : []),
-        ...recent.map((m) => ({
-          role: m.role as "user" | "assistant",
-          content: m.content,
-        })),
-        { role: "user", content: message },
-      ],
-      max_tokens: 500,
-      temperature: 0.9,
+    const system = translation.persona + languageRule + SAFETY_RULES;
+
+    const turns: ChatTurn[] = [
+      // 대화 기록이 없으면 캐릭터의 시작 인사말을 첫 발화로 넣어 맥락을 만든다
+      ...(recent.length === 0 && translation.greeting
+        ? [{ role: "assistant" as const, content: translation.greeting }]
+        : []),
+      ...recent.map((m) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+      })),
+      { role: "user" as const, content: message },
+    ];
+
+    // 6) 폴백 체인 실행 — 절대 실패하지 않는다 (최후엔 더미)
+    const result = await chatWithFallback({
+      system,
+      turns,
+      preferred: typeof model === "string" ? model : null,
+      characterSlug: character.slug,
+      locale,
+      userMessage: message,
+      lastReply,
     });
 
-    const reply = completion.choices[0]?.message?.content?.trim();
-    if (!reply) {
-      return NextResponse.json(
-        { error: "답변 생성에 실패했어요. 다시 시도해 주세요." },
-        { status: 502 }
-      );
-    }
-
-    // 6) 대화 저장 (유저 메시지 + 캐릭터 답변) — 새로고침해도 남는 이유
+    // 7) 대화 저장 (유저 메시지 + 캐릭터 답변) — 새로고침해도 남는 이유
     await supabase.from("messages").insert([
       {
         user_id: user.id,
@@ -141,12 +132,12 @@ export async function POST(request: Request) {
         user_id: user.id,
         character_id: characterId,
         role: "assistant",
-        content: reply,
+        content: result.reply,
         locale,
       },
     ]);
 
-    return NextResponse.json({ reply });
+    return NextResponse.json({ reply: result.reply });
   } catch (err) {
     console.error("/api/chat error:", err);
     return NextResponse.json(

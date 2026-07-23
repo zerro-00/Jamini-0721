@@ -81,15 +81,43 @@
 
 ---
 
-## 4. OpenAI API 키 발급 (AI 대화)
+## 4. AI 대화 키 발급 (전부 무료, 카드 등록 불필요!)
 
-1. https://platform.openai.com 접속 → 가입/로그인
-2. 결제 수단 등록: 오른쪽 위 ⚙ Settings → **Billing** → 카드 등록 후 최소 금액(예: $5) 충전
-   - 충전 없이는 API가 동작하지 않습니다. gpt-4o-mini는 매우 저렴해서 $5로도 오래 씁니다.
-3. https://platform.openai.com/api-keys → **Create new secret key**
-   - 이름 `vue` → 만들기 → `sk-` 로 시작하는 키가 딱 한 번 표시됩니다. 바로 복사!
-4. `.env.local` 의 `OPENAI_API_KEY` 에 붙여넣기
-   - ⚠️ 이 키도 절대 공개 금지. `NEXT_PUBLIC_` 을 붙이면 안 됩니다.
+VUE는 무료 AI 3개를 지원하고, 하나가 실패하면 자동으로 다음 것으로 넘어갑니다(폴백).
+
+> 💡 **키를 하나도 안 넣어도 대화는 작동합니다.**
+> 그 경우 캐릭터가 미리 준비된 응답으로 답해요 (발표 중 끊김 방지용 최종 안전장치).
+> 실제 AI 대화를 원하면 아래에서 **최소 1개** (추천: Gemini + Groq 2개)를 발급받으세요.
+
+*(무료 한도는 2026년 7월 기준이며 바뀔 수 있습니다)*
+
+### 4-1. Google Gemini (추천 ①: 가장 안정적)
+
+- 카드 등록: **불필요** / 무료 한도: 분당 10회, 하루 250회 (Gemini 2.5 Flash)
+1. https://aistudio.google.com 접속 → 구글 로그인
+2. 왼쪽(또는 우측 상단)의 **Get API key → Create API key** 클릭
+3. 생성된 키 복사 → `.env.local` 의 `GEMINI_API_KEY` 에 붙여넣기
+
+### 4-2. Groq (추천 ②: 하루 한도가 가장 큼)
+
+- 카드 등록: **불필요** / 무료 한도: 분당 30회, 하루 1,000~14,400회 (Llama 3.3 70B)
+1. https://console.groq.com 접속 → 구글 계정으로 가입
+2. 왼쪽 메뉴 **API Keys → Create API Key** → 이름 `vue` → 생성
+3. 키 복사 → `.env.local` 의 `GROQ_API_KEY` 에 붙여넣기
+
+### 4-3. OpenRouter (선택: 세 번째 백업)
+
+- 카드 등록: **불필요** / 무료 한도: 분당 20회, **하루 50회** (무충전 계정 — 한도가 작아 마지막 백업용)
+1. https://openrouter.ai 접속 → 이메일 또는 구글로 가입
+2. https://openrouter.ai/keys → **Create Key** → 생성
+3. 키 복사 → `.env.local` 의 `OPENROUTER_API_KEY` 에 붙여넣기
+
+### 공통 주의
+
+- ⚠️ 세 키 모두 절대 공개 금지. `NEXT_PUBLIC_` 을 붙이면 안 됩니다 (서버 전용).
+- 키를 넣거나 바꾼 뒤에는 개발 서버를 재시작해야 적용됩니다 (`Ctrl+C` 후 `npm run dev`).
+- 나중에 Vercel에 배포할 때는 Vercel 대시보드 → 프로젝트 → **Settings → Environment Variables** 에 같은 이름으로 똑같이 넣으면 됩니다.
+- 연결 상태는 **관리자 페이지(/admin) → AI 연결 상태** 에서 확인할 수 있어요.
 
 ---
 

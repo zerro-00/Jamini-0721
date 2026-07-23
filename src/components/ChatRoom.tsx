@@ -41,6 +41,30 @@ export default function ChatRoom({
     trackChatStart(slug);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
+
+  // ---------- AI 모델 선택 ----------
+  // 키가 설정된 모델만 서버가 내려준다. 선택은 대화(캐릭터)별로 localStorage에 유지.
+  const [models, setModels] = useState<{ id: string; label: string }[]>([]);
+  const [selectedModel, setSelectedModel] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/models")
+      .then((res) => res.json())
+      .then((data: { models: { id: string; label: string }[] }) => {
+        setModels(data.models);
+        if (data.models.length === 0) return;
+        const saved = localStorage.getItem(`vue-model-${slug}`);
+        const valid = data.models.find((m) => m.id === saved);
+        // 기본값: 가장 안정적인 모델(목록 첫 번째 = Gemini)
+        setSelectedModel(valid ? valid.id : data.models[0].id);
+      })
+      .catch(() => {}); // 실패해도 대화는 가능 (서버가 알아서 폴백)
+  }, [slug]);
+
+  function handleModelChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    setSelectedModel(e.target.value);
+    localStorage.setItem(`vue-model-${slug}`, e.target.value);
+  }
   const [messages, setMessages] = useState<ChatMessage[]>(
     initialMessages.map((m) => ({
       id: m.id,
@@ -80,6 +104,7 @@ export default function ChatRoom({
           characterId: character.id,
           message: text,
           locale,
+          model: selectedModel,
         }),
       });
       const data = await res.json();
@@ -141,12 +166,28 @@ export default function ChatRoom({
             </div>
           )}
         </div>
-        <div>
+        <div className="min-w-0 flex-1">
           <div className="text-sm font-bold text-ink">{character.name}</div>
-          <div className="max-w-[240px] truncate text-[11px] text-ink-soft sm:max-w-md">
+          <div className="max-w-[180px] truncate text-[11px] text-ink-soft sm:max-w-md">
             {character.description}
           </div>
         </div>
+
+        {/* AI 모델 선택 — 실제 모델명 그대로 표기 (키 없으면 숨김) */}
+        {models.length > 0 && selectedModel && (
+          <select
+            value={selectedModel}
+            onChange={handleModelChange}
+            aria-label="AI model"
+            className="max-w-[150px] cursor-pointer truncate rounded-full border border-line bg-panel px-2.5 py-1.5 text-[11px] text-ink outline-none transition hover:border-wine sm:max-w-[220px]"
+          >
+            {models.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.label} — {t(`models.${m.id}`)}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       {/* 말풍선 목록 */}

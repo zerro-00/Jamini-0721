@@ -26,7 +26,8 @@
     "dbNotReady": "아직 데이터베이스 연결이 완료되지 않았어요.",
     "dbNotReadyHint": "SETUP.md의 Supabase 설정(1~3번)을 먼저 완료해 주세요.",
     "noCharacters": "아직 등록된 캐릭터가 없어요. SETUP.md 3번(SQL 실행)을 완료하면 공식 캐릭터 4명이 나타납니다.",
-    "allTag": "전체"
+    "allTag": "전체",
+    "sectionTitle": "오늘의 캐릭터"
   },
   "characterDetail": {
     "chat": "대화 시작하기",
@@ -38,7 +39,12 @@
   "chat": {
     "placeholder": "{name}에게 메시지 보내기…",
     "send": "전송",
-    "sendFailed": "메시지 전송에 실패했어요."
+    "sendFailed": "메시지 전송에 실패했어요.",
+    "models": {
+      "gemini": "빠르고 가벼운 대화",
+      "groq": "균형 잡힌 자연스러운 대화",
+      "openrouter": "다국어에 강한 대화"
+    }
   },
   "profile": {
     "title": "내 프로필",

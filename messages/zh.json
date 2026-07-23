@@ -26,7 +26,8 @@
     "dbNotReady": "数据库连接尚未完成。",
     "dbNotReadyHint": "请先完成 SETUP.md 中的 Supabase 设置（第1~3步）。",
     "noCharacters": "还没有角色。完成 SETUP.md 第3步（运行 SQL）后，4位官方角色就会出现。",
-    "allTag": "全部"
+    "allTag": "全部",
+    "sectionTitle": "今日角色"
   },
   "characterDetail": {
     "chat": "开始对话",
@@ -38,7 +39,12 @@
   "chat": {
     "placeholder": "给{name}发消息…",
     "send": "发送",
-    "sendFailed": "消息发送失败。"
+    "sendFailed": "消息发送失败。",
+    "models": {
+      "gemini": "快速轻盈的对话",
+      "groq": "均衡自然的对话",
+      "openrouter": "擅长多语言的对话"
+    }
   },
   "profile": {
     "title": "我的主页",
