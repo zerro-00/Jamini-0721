@@ -7,6 +7,11 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { trackChatStart } from "@/lib/gaEvents";
+import {
+  trackEvent,
+  trackEventBeacon,
+  noteChatActivity,
+} from "@/lib/events";
 import { focalPosition } from "@/lib/focal";
 import ModelPicker, { type ModelInfo } from "@/components/ModelPicker";
 
@@ -37,11 +42,43 @@ export default function ChatRoom({
 }) {
   const t = useTranslations("chat");
 
-  // GA: 캐릭터별 대화 시작 이벤트 (1회, 개인정보 없음)
+  // GA + 자체 이벤트: 대화 시작 (1회, 개인정보 없음)
   useEffect(() => {
     trackChatStart(slug);
+    // 진입 경로 분류: 메일 링크(?src=mail) > 캐릭터 상세 > 홈 > 직접
+    const urlSrc = new URLSearchParams(window.location.search).get("src");
+    const ref = document.referrer;
+    const src =
+      urlSrc === "mail"
+        ? "mail"
+        : ref.includes("/characters/")
+          ? "detail"
+          : ref
+            ? "home"
+            : "direct";
+    trackEvent({ event_type: "chat_start", character_slug: slug, locale, src });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
+
+  // 대화 이탈 이벤트 — 탭이 가려질 때 마지막 턴 수 기록 (sendBeacon)
+  // 기존 대화가 있으면 그 유저 턴 수부터 시작
+  const turnRef = useRef(
+    initialMessages.filter((m) => m.role === "user").length
+  );
+  useEffect(() => {
+    function onHide() {
+      if (document.visibilityState === "hidden" && turnRef.current > 0) {
+        trackEventBeacon({
+          event_type: "chat_leave",
+          character_slug: slug,
+          locale,
+          turn_count: turnRef.current,
+        });
+      }
+    }
+    document.addEventListener("visibilitychange", onHide);
+    return () => document.removeEventListener("visibilitychange", onHide);
+  }, [slug, locale]);
 
   // ---------- AI 모델 선택 ----------
   // 키가 설정된 모델만 서버가 내려준다 (키 값은 절대 안 내려옴).
@@ -67,6 +104,17 @@ export default function ChatRoom({
   }, []);
 
   function handleModelSelect(id: string | null) {
+    // 자체 이벤트: 모델 변경 (변경 전/후 + 그 시점의 턴 수)
+    if (id !== selectedModel) {
+      trackEvent({
+        event_type: "model_change",
+        character_slug: slug,
+        locale,
+        prev_model: selectedModel ?? "auto",
+        model: id ?? "auto",
+        turn_count: turnRef.current,
+      });
+    }
     setSelectedModel(id);
     if (id) localStorage.setItem(MODEL_STORAGE_KEY, id);
     else localStorage.removeItem(MODEL_STORAGE_KEY);
@@ -124,6 +172,10 @@ export default function ChatRoom({
         ...prev,
         { id: `local-${prev.length}`, role: "assistant", content: data.reply },
       ]);
+
+      // 턴 수 갱신 (이탈 이벤트·요금제 "대화 후 진입" 판별용)
+      turnRef.current += 1;
+      noteChatActivity(turnRef.current);
 
       // 특정 모델을 선택했는데 그 모델이 응답하지 못한 경우:
       // 짧은 안내를 보여주고 "자동"으로 되돌린다 (대화 자체는 폴백으로 이미 이어짐)

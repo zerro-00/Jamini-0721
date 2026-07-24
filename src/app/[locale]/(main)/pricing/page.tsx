@@ -1,11 +1,13 @@
 // 요금제 — 월 구독 + 코인 충전 카드. 결제는 2단계에서 연동 예정 ("준비 중")
 import { getTranslations } from "next-intl/server";
+import PricingTracker from "@/components/PricingTracker";
 
 export default async function PricingPage() {
   const t = await getTranslations("pricing");
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-10">
+      <PricingTracker />
       <div className="mb-10 text-center">
         <h1 className="text-2xl font-black text-ink sm:text-3xl">
           {t("title")}

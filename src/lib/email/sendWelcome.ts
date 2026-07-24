@@ -29,19 +29,29 @@ function isEnabled(): boolean {
   return process.env.WELCOME_EMAIL_ENABLED === "true" && isGmailConfigured();
 }
 
-// 본문 줄바꿈을 그대로 살려 HTML로 (확정된 줄바꿈 유지)
+// 본문 줄바꿈을 그대로 살려 HTML로 (확정된 문장·줄바꿈 무수정)
+// 마지막 서명 줄("— 렌")만 오른쪽 정렬로 "표시" — 텍스트 자체는 그대로다
 function bodyToHtml(body: string): string {
-  return body
-    .split("\n")
-    .map((line) =>
-      line.trim() === ""
-        ? `<div style="height:16px;line-height:16px;">&nbsp;</div>`
-        : `<div style="margin:0;padding:0;color:${C.ink};font-size:15px;line-height:1.7;">${line}</div>`
-    )
+  const lines = body.split("\n");
+  // 마지막 비어있지 않은 줄이 "— " 로 시작하면 서명으로 간주
+  let signatureIndex = -1;
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (lines[i].trim() !== "") {
+      if (lines[i].trim().startsWith("—")) signatureIndex = i;
+      break;
+    }
+  }
+  return lines
+    .map((line, i) => {
+      if (line.trim() === "")
+        return `<div style="height:16px;line-height:16px;">&nbsp;</div>`;
+      const align = i === signatureIndex ? "text-align:right;" : "";
+      return `<div style="margin:0;padding:0;color:${C.ink};font-size:15px;line-height:1.8;${align}">${line}</div>`;
+    })
     .join("");
 }
 
-function renderHtml(params: {
+export function renderHtml(params: {
   name: string;
   slug: string;
   locale: WelcomeLocale;
@@ -52,32 +62,55 @@ function renderHtml(params: {
   cta: string;
 }): string {
   const t = COMMON_TEXTS[params.locale];
-  // 인라인 CSS · 600px 고정 · 다크 테마 · 이미지 차단돼도 내용 성립
+  // 인라인 CSS · 600px 고정 · 다크 테마 · 이미지 차단돼도 편지가 온전히 읽힘
+  // 레이아웃: 상단 대형 세로 사진(원본 비율, 크롭·원형 마스크 없음, 가로 거의 꽉 채움)
+  //           → 가운데 "렌 — VUE" → 제목(좌) + 아래 구분선 → 본문(서명 우측) → CTA → 푸터
+  // 전부 위→아래 table 스택이라 데스크톱·모바일 구조가 동일하고 미디어쿼리 불필요
   return `<!DOCTYPE html>
 <html lang="${params.locale}">
 <body style="margin:0;padding:0;background-color:${C.night};">
   <div style="display:none;max-height:0;overflow:hidden;">${params.subject}</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:${C.night};">
-    <tr><td align="center" style="padding:32px 12px;">
+    <tr><td align="center" style="padding:24px 10px;">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:${C.panel};border:1px solid ${C.line};border-radius:20px;">
-        <tr><td align="center" style="padding:36px 32px 0;">
-          <img src="${params.imageUrl}" alt="${params.name}" width="120" height="120"
-            style="display:block;width:120px;height:120px;border-radius:60px;object-fit:cover;object-position:top;border:1px solid ${C.line};" />
+
+        <!-- 상단: 대형 세로 사진 (원본 비율 유지, 크롭 없음) -->
+        <!-- width 를 픽셀(속성)과 퍼센트(스타일) 양쪽으로 지정 — Outlook 대응 -->
+        <tr><td align="center" style="padding:20px 20px 0;">
+          <img src="${params.imageUrl}" alt="${params.name}" width="560"
+            style="display:block;width:100%;max-width:560px;height:auto;border-radius:10px;border:1px solid ${C.line};" />
         </td></tr>
-        <tr><td align="center" style="padding:20px 32px 0;">
-          <div style="color:${C.rose};font-size:13px;font-family:-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;">${params.name} — VUE</div>
-          <div style="color:${C.ink};font-size:21px;font-weight:bold;padding-top:8px;font-family:-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;">${params.subject}</div>
+
+        <!-- 사진 아래 가운데: 캐릭터 표기 (핑크 포인트, 작은 글씨) -->
+        <tr><td align="center" style="padding:12px 20px 0;">
+          <span style="color:${C.rose};font-size:13px;font-family:-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;">${params.name} — VUE</span>
         </td></tr>
-        <tr><td style="padding:28px 40px 0;font-family:-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;">
+
+        <!-- 편지: 제목(좌) + 아래 가로 구분선 -->
+        <tr><td style="padding:28px 28px 0;">
+          <div style="color:${C.ink};font-size:21px;font-weight:bold;font-family:-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;">${params.subject}</div>
+          <div style="border-bottom:1px solid ${C.line};padding-top:14px;font-size:0;line-height:0;">&nbsp;</div>
+        </td></tr>
+
+        <tr><td style="padding:24px 28px 0;font-family:-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;">
           ${bodyToHtml(params.body)}
         </td></tr>
-        <tr><td align="center" style="padding:32px 32px 0;">
+        <!-- CTA 버튼 (가운데) -->
+        <tr><td align="center" style="padding:30px 28px 0;">
           <a href="${params.chatUrl}"
             style="display:inline-block;background-color:${C.cta};color:${C.ink};text-decoration:none;font-size:15px;font-weight:bold;padding:14px 36px;border-radius:14px;font-family:-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;">${params.cta}</a>
-          <div style="color:${C.inkSoft};font-size:12px;padding-top:14px;font-family:-apple-system,sans-serif;">${t.others}</div>
         </td></tr>
-        <tr><td align="center" style="padding:32px;">
-          <div style="border-top:1px solid ${C.line};padding-top:20px;">
+
+        <!-- 버튼 아래 구분선 + 다른 캐릭터 안내 -->
+        <tr><td style="padding:26px 28px 0;">
+          <div style="border-bottom:1px solid ${C.line};font-size:0;line-height:0;">&nbsp;</div>
+        </td></tr>
+        <tr><td align="center" style="padding:18px 28px 0;">
+          <div style="color:${C.inkSoft};font-size:12px;font-family:-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;">${t.others}</div>
+        </td></tr>
+
+        <tr><td align="center" style="padding:24px 28px 28px;">
+          <div style="">
             <div style="color:${C.rose};font-size:14px;letter-spacing:2px;">&#9664;&#9664;&nbsp;<span style="color:${C.ink};font-weight:bold;">VUE</span></div>
             <div style="color:${C.inkSoft};font-size:11px;padding-top:6px;font-family:-apple-system,sans-serif;">${t.tagline}</div>
             <div style="padding-top:10px;">
@@ -93,7 +126,7 @@ function renderHtml(params: {
 }
 
 // 텍스트 전용 버전 (이미지·HTML 차단 환경)
-function renderText(params: {
+export function renderText(params: {
   name: string;
   locale: WelcomeLocale;
   chatUrl: string;
@@ -176,7 +209,8 @@ export async function maybeSendWelcomeEmail(
     // 4) 발송
     const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
     const mail = WELCOME_MAILS[picked.slug][locale];
-    const chatUrl = `${siteUrl}/${locale}/chat/${picked.slug}`;
+    // ?src=mail — 메일 링크 유입 측정용 (본문·레이아웃 무변경, 승인됨)
+    const chatUrl = `${siteUrl}/${locale}/chat/${picked.slug}?src=mail`;
     const imageUrl = `${siteUrl}${picked.thumbnail_url ?? ""}`;
 
     // 발송 (Gmail SMTP — 하루 500통 제한 주의, 상세는 gmailTransport.ts 참조)

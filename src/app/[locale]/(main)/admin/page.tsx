@@ -2,6 +2,7 @@
 // GA 조회는 /api/admin/analytics (서버) 를 통해서만 이뤄진다.
 import AnalyticsDashboard from "@/components/AnalyticsDashboard";
 import ProviderStatus from "@/components/ProviderStatus";
+import BehaviorStats from "@/components/BehaviorStats";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,8 @@ export default function AdminDashboardPage() {
     <div className="space-y-6">
       <ProviderStatus />
       <AnalyticsDashboard />
+      {/* 행동 분석 (자체 이벤트 기반 — GA 카드 아래 추가) */}
+      <BehaviorStats />
     </div>
   );
 }
