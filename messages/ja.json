@@ -50,7 +50,9 @@
     "modelPickerTitle": "AIモデルを選択",
     "modelCancel": "キャンセル",
     "modelConfirm": "選択",
-    "modelFallbackNotice": "選択したモデルが応答しなかったため、自動モードに戻しました。"
+    "modelFallbackNotice": "選択したモデルが応答しなかったため、自動モードに戻しました。",
+    "modelMeasuring": "計測中",
+    "modelPerf": "平均 {sec}秒 · 成功率 {rate}%"
   },
   "profile": {
     "title": "マイページ",

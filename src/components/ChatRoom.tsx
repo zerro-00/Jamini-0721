@@ -183,19 +183,10 @@ export default function ChatRoom({
         </div>
         <div className="min-w-0 flex-1">
           <div className="text-sm font-bold text-ink">{character.name}</div>
-          <div className="max-w-[180px] truncate text-[11px] text-ink-soft sm:max-w-md">
+          <div className="max-w-[240px] truncate text-[11px] text-ink-soft sm:max-w-md">
             {character.description}
           </div>
         </div>
-
-        {/* AI 모델 선택 — 실제 모델명 그대로 표기. 사용 가능 모델 0개면 렌더링 안 함 */}
-        {models.length > 0 && (
-          <ModelPicker
-            models={models}
-            selected={selectedModel}
-            onSelect={handleModelSelect}
-          />
-        )}
       </div>
 
       {/* 말풍선 목록 */}
@@ -238,26 +229,35 @@ export default function ChatRoom({
         <div ref={bottomRef} />
       </div>
 
-      {/* 입력창 */}
-      <form
-        onSubmit={handleSend}
-        className="sticky bottom-0 -mx-4 flex gap-2 border-t border-line bg-night px-4 py-3"
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={t("placeholder", { name: character.name })}
-          className="flex-1 rounded-full border border-line bg-panel px-4 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink-soft/60 focus:border-wine"
-          maxLength={1000}
-        />
-        <button
-          type="submit"
-          disabled={sending || !input.trim()}
-          className="rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-cta-hover disabled:opacity-40"
-        >
-          {t("send")}
-        </button>
-      </form>
+      {/* 입력 영역 (모델 선택 + 입력창) — 함께 하단에 고정 */}
+      <div className="sticky bottom-0 -mx-4 border-t border-line bg-night px-4 pb-3 pt-2">
+        {/* AI 모델 선택 — 입력창 바로 위, 왼쪽 정렬. 사용 가능 모델 0개면 렌더링 안 함 */}
+        {models.length > 0 && (
+          <div className="mb-2 flex justify-start">
+            <ModelPicker
+              models={models}
+              selected={selectedModel}
+              onSelect={handleModelSelect}
+            />
+          </div>
+        )}
+        <form onSubmit={handleSend} className="flex gap-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={t("placeholder", { name: character.name })}
+            className="min-w-0 flex-1 rounded-full border border-line bg-panel px-4 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink-soft/60 focus:border-wine"
+            maxLength={1000}
+          />
+          <button
+            type="submit"
+            disabled={sending || !input.trim()}
+            className="shrink-0 rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-cta-hover disabled:opacity-40"
+          >
+            {t("send")}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

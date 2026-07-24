@@ -50,7 +50,9 @@
     "modelPickerTitle": "Choose AI model",
     "modelCancel": "Cancel",
     "modelConfirm": "Select",
-    "modelFallbackNotice": "The selected model didn't respond, switched back to Auto."
+    "modelFallbackNotice": "The selected model didn't respond, switched back to Auto.",
+    "modelMeasuring": "Measuring",
+    "modelPerf": "avg {sec}s · {rate}% success"
   },
   "profile": {
     "title": "My Profile",

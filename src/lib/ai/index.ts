@@ -64,15 +64,16 @@ export async function chatWithFallback(params: {
   });
 
   for (const provider of chain) {
+    const started = Date.now(); // 실측 응답속도 기록용
     try {
       const reply = await callWithTimeout(provider, params.system, params.turns);
-      recordCall(provider.id, true);
+      recordCall(provider.id, true, Date.now() - started);
       console.log(`[ai] replied via ${provider.id} (${provider.modelId})`);
       return { reply, via: provider.id };
     } catch (err) {
       // 기술적 오류는 서버 로그에만 남긴다
       const note = err instanceof Error ? err.message : String(err);
-      recordCall(provider.id, false, note);
+      recordCall(provider.id, false, Date.now() - started, note);
       console.warn(`[ai] ${provider.id} failed → next. (${note})`);
     }
   }

@@ -50,7 +50,9 @@
     "modelPickerTitle": "选择AI模型",
     "modelCancel": "取消",
     "modelConfirm": "确定",
-    "modelFallbackNotice": "所选模型没有响应，已切换回自动模式。"
+    "modelFallbackNotice": "所选模型没有响应，已切换回自动模式。",
+    "modelMeasuring": "测量中",
+    "modelPerf": "平均 {sec}秒 · 成功率 {rate}%"
   },
   "profile": {
     "title": "我的主页",
