@@ -159,9 +159,11 @@ export default function ChatRoom({
   );
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4">
-      {/* 대화 상대 헤더 */}
-      <div className="sticky top-14 z-40 -mx-4 flex items-center gap-3 border-b border-line bg-night/90 px-4 py-3 backdrop-blur">
+    // 대화 영역이 화면 세로를 가득 채운다 (100dvh - 상단 네비 3.5rem)
+    // dvh 단위: 모바일 주소창 높이 변화에도 입력창이 잘리지 않음
+    <div className="mx-auto flex h-[calc(100dvh-3.5rem)] w-full max-w-2xl flex-col px-4">
+      {/* 대화 상대 헤더 (고정 높이) */}
+      <div className="-mx-4 flex shrink-0 items-center gap-3 border-b border-line bg-night px-4 py-3">
         <Link href="/" className="text-ink-soft transition hover:text-ink">
           ←
         </Link>
@@ -189,8 +191,8 @@ export default function ChatRoom({
         </div>
       </div>
 
-      {/* 말풍선 목록 */}
-      <div className="flex flex-1 flex-col gap-3 py-6">
+      {/* 말풍선 목록 — 남는 공간을 모두 차지하고, 넘치면 여기만 스크롤 */}
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto py-6">
         {/* 대화 기록이 없으면 캐릭터의 시작 인사말 표시 */}
         {messages.length === 0 && character.greeting && (
           <Bubble role="assistant" avatar={avatar}>
@@ -229,8 +231,8 @@ export default function ChatRoom({
         <div ref={bottomRef} />
       </div>
 
-      {/* 입력 영역 (모델 선택 + 입력창) — 함께 하단에 고정 */}
-      <div className="sticky bottom-0 -mx-4 border-t border-line bg-night px-4 pb-3 pt-2">
+      {/* 입력 영역 (모델 선택 + 입력창) — 대화 영역 맨 아래 고정 (메시지가 적어도 위로 안 뜸) */}
+      <div className="-mx-4 shrink-0 border-t border-line bg-night px-4 pb-3 pt-2">
         {/* AI 모델 선택 — 입력창 바로 위, 왼쪽 정렬. 사용 가능 모델 0개면 렌더링 안 함 */}
         {models.length > 0 && (
           <div className="mb-2 flex justify-start">

@@ -27,8 +27,7 @@ const notoSc = Noto_Sans_SC({
 
 export const metadata: Metadata = {
   title: "VUE — 다시 보고 싶은 그 한 장면",
-  description:
-    "잠들지 못하는 밤, 캐릭터와 나누는 대화. 안전선 안에서 웹툰처럼 몰입되는 AI 캐릭터 서비스 VUE.",
+  description: "다시 한번 느껴보고 싶은 설렘 — 잠들지 못하는 밤의 AI 캐릭터 대화, VUE.",
 };
 
 export function generateStaticParams() {
