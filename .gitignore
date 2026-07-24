@@ -41,3 +41,8 @@ yarn-error.log*
 next-env.d.ts
 !.env.local.example
 !.env.example
+
+# 구글 서비스 계정 키 파일 (절대 커밋 금지)
+vue0721-*.json
+*service-account*.json
+*gserviceaccount*.json
