@@ -44,7 +44,13 @@
       "gemini": "快速轻盈的对话",
       "groq": "均衡自然的对话",
       "openrouter": "擅长多语言的对话"
-    }
+    },
+    "modelAuto": "自动",
+    "modelAutoDesc": "自动（失败时切换到下一个）",
+    "modelPickerTitle": "选择AI模型",
+    "modelCancel": "取消",
+    "modelConfirm": "确定",
+    "modelFallbackNotice": "所选模型没有响应，已切换回自动模式。"
   },
   "profile": {
     "title": "我的主页",

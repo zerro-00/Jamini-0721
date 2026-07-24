@@ -2,7 +2,17 @@
 import "server-only";
 import type { Provider, ChatTurn } from "../types";
 
-const MODEL_ID = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+// 2026-07 확인: 신규 계정에는 gemini-2.5-flash 제공 종료 → 3.6 Flash 사용
+// (env GEMINI_MODEL 로 교체 가능)
+const MODEL_ID = process.env.GEMINI_MODEL ?? "gemini-3.6-flash";
+
+// 모델 ID → 표기 이름 (예: gemini-3.6-flash → Gemini 3.6 Flash)
+function labelFromId(id: string): string {
+  return id
+    .split("-")
+    .map((w) => (/^\d/.test(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)))
+    .join(" ");
+}
 
 async function chat(
   system: string,
@@ -40,7 +50,7 @@ async function chat(
 export const gemini: Provider = {
   id: "gemini",
   providerName: "Google Gemini",
-  modelLabel: "Gemini 2.5 Flash",
+  modelLabel: labelFromId(MODEL_ID),
   modelId: MODEL_ID,
   isConfigured: () => Boolean(process.env.GEMINI_API_KEY),
   chat,

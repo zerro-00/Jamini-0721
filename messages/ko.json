@@ -44,7 +44,13 @@
       "gemini": "빠르고 가벼운 대화",
       "groq": "균형 잡힌 자연스러운 대화",
       "openrouter": "다국어에 강한 대화"
-    }
+    },
+    "modelAuto": "자동",
+    "modelAutoDesc": "자동 (실패 시 다음 모델로)",
+    "modelPickerTitle": "AI 모델 선택",
+    "modelCancel": "취소",
+    "modelConfirm": "선택",
+    "modelFallbackNotice": "선택한 모델이 응답하지 않아 자동 모드로 전환했어요."
   },
   "profile": {
     "title": "내 프로필",

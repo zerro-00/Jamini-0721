@@ -44,7 +44,13 @@
       "gemini": "Fast, light conversation",
       "groq": "Balanced, natural conversation",
       "openrouter": "Strong multilingual chat"
-    }
+    },
+    "modelAuto": "Auto",
+    "modelAutoDesc": "Auto (switches on failure)",
+    "modelPickerTitle": "Choose AI model",
+    "modelCancel": "Cancel",
+    "modelConfirm": "Select",
+    "modelFallbackNotice": "The selected model didn't respond, switched back to Auto."
   },
   "profile": {
     "title": "My Profile",

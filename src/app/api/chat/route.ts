@@ -137,7 +137,9 @@ export async function POST(request: Request) {
       },
     ]);
 
-    return NextResponse.json({ reply: result.reply });
+    // via = 어떤 프로바이더가 답했는지 (id 문자열만 — 키 값은 절대 포함 안 됨)
+    // 클라이언트는 "선택한 모델 ≠ via" 일 때 자동 모드 전환 안내에 사용한다
+    return NextResponse.json({ reply: result.reply, via: result.via });
   } catch (err) {
     console.error("/api/chat error:", err);
     return NextResponse.json(

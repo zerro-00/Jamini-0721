@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { trackChatStart } from "@/lib/gaEvents";
 import { focalPosition } from "@/lib/focal";
+import ModelPicker, { type ModelInfo } from "@/components/ModelPicker";
 
 type ChatMessage = {
   id: string;
@@ -43,27 +44,32 @@ export default function ChatRoom({
   }, [slug]);
 
   // ---------- AI 모델 선택 ----------
-  // 키가 설정된 모델만 서버가 내려준다. 선택은 대화(캐릭터)별로 localStorage에 유지.
-  const [models, setModels] = useState<{ id: string; label: string }[]>([]);
+  // 키가 설정된 모델만 서버가 내려준다 (키 값은 절대 안 내려옴).
+  // 기본값은 "자동"(null) = 기존 폴백 체인 그대로. 선택은 사용자 단위로 localStorage에 유지.
+  const MODEL_STORAGE_KEY = "vue-model";
+  const [models, setModels] = useState<ModelInfo[]>([]);
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/models")
       .then((res) => res.json())
-      .then((data: { models: { id: string; label: string }[] }) => {
+      .then((data: { models: ModelInfo[] }) => {
         setModels(data.models);
         if (data.models.length === 0) return;
-        const saved = localStorage.getItem(`vue-model-${slug}`);
-        const valid = data.models.find((m) => m.id === saved);
-        // 기본값: 가장 안정적인 모델(목록 첫 번째 = Gemini)
-        setSelectedModel(valid ? valid.id : data.models[0].id);
+        const saved = localStorage.getItem(MODEL_STORAGE_KEY);
+        // 저장값이 현재 활성 모델이면 복원, 아니면 자동(null) 유지
+        setSelectedModel(
+          data.models.some((m) => m.id === saved) ? saved : null
+        );
       })
       .catch(() => {}); // 실패해도 대화는 가능 (서버가 알아서 폴백)
-  }, [slug]);
+  }, []);
 
-  function handleModelChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    setSelectedModel(e.target.value);
-    localStorage.setItem(`vue-model-${slug}`, e.target.value);
+  function handleModelSelect(id: string | null) {
+    setSelectedModel(id);
+    if (id) localStorage.setItem(MODEL_STORAGE_KEY, id);
+    else localStorage.removeItem(MODEL_STORAGE_KEY);
   }
   const [messages, setMessages] = useState<ChatMessage[]>(
     initialMessages.map((m) => ({
@@ -104,7 +110,8 @@ export default function ChatRoom({
           characterId: character.id,
           message: text,
           locale,
-          model: selectedModel,
+          // "자동"이면 model 을 보내지 않는다 → 기존 폴백 로직 그대로
+          ...(selectedModel ? { model: selectedModel } : {}),
         }),
       });
       const data = await res.json();
@@ -117,6 +124,14 @@ export default function ChatRoom({
         ...prev,
         { id: `local-${prev.length}`, role: "assistant", content: data.reply },
       ]);
+
+      // 특정 모델을 선택했는데 그 모델이 응답하지 못한 경우:
+      // 짧은 안내를 보여주고 "자동"으로 되돌린다 (대화 자체는 폴백으로 이미 이어짐)
+      if (selectedModel && data.via && data.via !== selectedModel) {
+        setNotice(t("modelFallbackNotice"));
+        handleModelSelect(null);
+        setTimeout(() => setNotice(null), 4000);
+      }
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : t("sendFailed"));
     } finally {
@@ -173,20 +188,13 @@ export default function ChatRoom({
           </div>
         </div>
 
-        {/* AI 모델 선택 — 실제 모델명 그대로 표기 (키 없으면 숨김) */}
-        {models.length > 0 && selectedModel && (
-          <select
-            value={selectedModel}
-            onChange={handleModelChange}
-            aria-label="AI model"
-            className="max-w-[150px] cursor-pointer truncate rounded-full border border-line bg-panel px-2.5 py-1.5 text-[11px] text-ink outline-none transition hover:border-wine sm:max-w-[220px]"
-          >
-            {models.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.label} — {t(`models.${m.id}`)}
-              </option>
-            ))}
-          </select>
+        {/* AI 모델 선택 — 실제 모델명 그대로 표기. 사용 가능 모델 0개면 렌더링 안 함 */}
+        {models.length > 0 && (
+          <ModelPicker
+            models={models}
+            selected={selectedModel}
+            onSelect={handleModelSelect}
+          />
         )}
       </div>
 
@@ -219,6 +227,12 @@ export default function ChatRoom({
         {errorMsg && (
           <div className="mx-auto rounded-xl border border-line bg-panel px-4 py-2 text-center text-xs text-ink-soft">
             {errorMsg}
+          </div>
+        )}
+        {/* 모델 자동 전환 안내 (잠깐 표시 후 사라짐) */}
+        {notice && (
+          <div className="mx-auto rounded-xl border border-wine/40 bg-panel px-4 py-2 text-center text-xs text-wine">
+            {notice}
           </div>
         )}
         <div ref={bottomRef} />

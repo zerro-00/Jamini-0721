@@ -44,7 +44,13 @@
       "gemini": "速くて軽い会話",
       "groq": "バランスの取れた自然な会話",
       "openrouter": "多言語に強い会話"
-    }
+    },
+    "modelAuto": "自動",
+    "modelAutoDesc": "自動（失敗時は次のモデルへ）",
+    "modelPickerTitle": "AIモデルを選択",
+    "modelCancel": "キャンセル",
+    "modelConfirm": "選択",
+    "modelFallbackNotice": "選択したモデルが応答しなかったため、自動モードに戻しました。"
   },
   "profile": {
     "title": "マイページ",
